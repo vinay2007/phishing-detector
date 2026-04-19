@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sentinel Pro | Advanced Web Security</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #09090b; color: #fafafa; overflow-x: hidden; }
+
+        /* Parallax Core Styles */
+        .parallax-wrapper {
+            perspective: 1px;
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        /* Decorative Grid Background */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(to right, #18181b 1px, transparent 1px),
+                linear-gradient(to bottom, #18181b 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        [x-cloak] { display: none !important; }
+        .zinc-border { border-color: #27272a; }
+        .zinc-bg { background-color: #09090b; }
+
+        .nav-link { font-size: 0.875rem; color: #a1a1aa; transition: color 0.2s; cursor: pointer; }
+        .nav-link:hover { color: #ffffff; }
+
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #27272a;
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        .feature-card:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.03);
+            transform: translateY(-5px);
+        }
+
+        /* Floating Parallax Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body x-data="{
+    page: 'landing',
+    url: '',
+    loading: false,
+    result: null,
+    scrollY: 0,
+    async init() {
+        const path = window.location.pathname;
+        if (path === '/app') {
+            this.page = 'dashboard';
+        } else {
+            this.page = 'landing';
+        }
+
+        window.onpopstate = (event) => {
+            this.page = (event.state && event.state.page) ? event.state.page : 'landing';
+        };
+
+        window.addEventListener('scroll', () => {
+            this.scrollY = window.scrollY;
+        });
+    },
+    navigate(target) {
+        this.page = (target === 'landing') ? 'landing' : 'dashboard';
+        const path = (target === 'landing') ? '/about' : '/app';
+        this.result = null;
+        history.pushState({page: this.page}, '', path);
+        window.scrollTo(0, 0);
+    },
+    async analyze() {
+        if (!this.url) return;
+        this.loading = true;
+        this.result = null;
+        try {
+            const res = await fetch('/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: this.url })
+            });
+            this.result = await res.json();
+        } catch (e) { alert('Check that your AI engine is running.'); }
+        this.loading = false;
+    },
+    async feedback(label) {
+        await fetch('/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: this.url, label: label })
+        });
+        alert('Thank you for helping AI Sentinel Pro get smarter!');
+        this.result = null;
+        this.url = '';
+    }
+}" x-init="init()">
+
+<!-- Fixed Parallax Elements -->
+<div class="grid-bg" :style="'transform: translateY(' + (scrollY * 0.1) + 'px)'"></div>
+<div class="blob bg-blue-600 w-[500px] h-[500px] -top-20 -left-20" :style="'transform: translate(' + (scrollY * -0.05) + 'px, ' + (scrollY * 0.2) + 'px)'"></div>
+<div class="blob bg-purple-600 w-[400px] h-[400px] top-1/2 -right-20" :style="'transform: translate(' + (scrollY * 0.05) + 'px, ' + (scrollY * -0.1) + 'px)'"></div>
+
+<!-- Header Navigation -->
+<nav class="zinc-border border-b px-8 py-5 flex justify-between items-center bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="flex items-center gap-2 cursor-pointer" @click="navigate('landing')">
+        <span class="text-xl font-bold tracking-tight text-white">🛡️ AI SENTINEL PRO</span>
+    </div>
+    <div class="flex items-center gap-8 text-sm">
+        <div class="hidden md:flex gap-6">
+            <span @click="navigate('landing')" class="nav-link">About</span>
+            <span @click="navigate('dashboard')" class="nav-link">Forensics</span>
+            <a href="/document" target="_blank" class="nav-link">Technical Docs</a>
+        </div>
+        <button @click="navigate('dashboard')" class="bg-white text-black px-4 py-2 rounded-md font-semibold hover:bg-zinc-200 transition">Scan Website</button>
+    </div>
+</nav>
+
+<!-- 1. LANDING PAGE WITH PARALLAX -->
+<template x-if="page === 'landing'">
+    <main class="fade-in">
+        <!-- Hero Section -->
+        <section class="max-w-6xl mx-auto px-8 py-32 border-b zinc-border relative">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div :style="'transform: translateY(' + (scrollY * -0.02) + 'px)'">
+                    <span class="text-blue-500 text-sm font-semibold tracking-widest uppercase">Version 6.5.0 Stable</span>
+                    <h1 class="text-7xl font-extrabold tracking-tight text-white leading-[1.1] mt-4">Security for the <br><span class="text-zinc-600">modern web.</span></h1>
+                    <p class="text-zinc-400 text-xl mt-8 leading-relaxed max-w-lg">AI Sentinel Pro is an autonomous forensic engine designed to identify, analyze, and neutralize zero-day phishing vectors before they reach your users.</p>
+                    <div class="mt-12 flex flex-wrap gap-4">
+                        <button @click="navigate('dashboard')" class="bg-white text-black px-10 py-4 rounded-xl font-bold hover:scale-105 transition shadow-[0_0_30px_rgba(255,255,255,0.1)]">Deploy Engine</button>
+                        <a href="/document" target="_blank" class="zinc-border border px-10 py-4 rounded-xl font-bold hover:bg-zinc-900 transition">Technical Document</a>
+                    </div>
+                </div>
+                <div class="relative" :style="'transform: translateY(' + (scrollY * 0.05) + 'px)'">
+                    <div class="absolute inset-0 bg-blue-500/10 blur-[120px] rounded-full"></div>
+                    <div class="relative zinc-border border rounded-3xl p-8 bg-zinc-900/40 backdrop-blur shadow-2xl">
+                        <div class="flex items-center gap-2 mb-6">
+                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span class="ml-auto text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Cognitive Terminal</span>
+                        </div>
+                        <div class="font-mono text-sm space-y-2 text-blue-400/80">
+                            <p class="text-zinc-500">> Initializing Sentinel Core...</p>
+                            <p class="text-zinc-500">> Syncing Global Threat Intel...</p>
+                            <p class="text-zinc-500">> Loading DistilBERT Weights...</p>
+                            <p class="text-white">> SYSTEM READY. STANDING BY FOR INPUT.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Breakdown -->
+        <section class="max-w-6xl mx-auto px-8 py-32">
+            <div class="text-center mb-24" :style="'transform: translateY(' + (scrollY * -0.03) + 'px)'">
+                <h2 class="text-5xl font-bold tracking-tight text-white">Advanced Forensic Tiers</h2>
+                <p class="text-zinc-500 mt-4 text-xl">Our engine uses a multi-tier audit to ensure 99.9% detection accuracy.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-8 rounded-3xl feature-card" :style="'transform: translateY(' + (scrollY * -0.01) + 'px)'">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mb-6 text-2xl">🧬</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Sequence DNA</h3>
+                    <p class="text-zinc-500 text-sm leading-relaxed">Using DistilBERT Transformers, we analyze the semantic architecture of URLs to detect subtle brand-spoofing that escapes traditional scanners.</p>
+                </div>
+                <div class="p-8 rounded-3xl feature-card" :style="'transform: translateY(' + (scrollY * -0.04) + 'px)'">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mb-6 text-2xl">🌐</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Behavioral Sandbox</h3>
+                    <p class="text-zinc-500 text-sm leading-relaxed">Our engine orchestrates a live headless browser session to audit the site DOM, identifying hidden login traps and data exfiltration endpoints.</p>
+                </div>
+                <div class="p-8 rounded-3xl feature-card" :style="'transform: translateY(' + (scrollY * -0.02) + 'px)'">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mb-6 text-2xl">⚡</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Hybrid Weighted Logic</h3>
+                    <p class="text-zinc-500 text-sm leading-relaxed">By combining Random Forest logical rules with Deep Learning patterns, we provide a cross-verified Risk Score you can trust.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Problem Section -->
+        <section class="zinc-bg border-y zinc-border py-32 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto px-8 flex flex-col md:flex-row gap-16 items-center relative z-10">
+                <div class="flex-1" :style="'transform: translateX(' + (scrollY * -0.02) + 'px)'">
+                    <h2 class="text-4xl font-bold text-white mb-6">Why static blacklists fail.</h2>
+                    <p class="text-zinc-400 text-lg leading-relaxed">Scammers create thousands of new sites every day. AI Sentinel Pro analyzes behavior in real-time, catching threats before they are even listed in global databases.</p>
+                </div>
+                <div class="flex-1 grid grid-cols-2 gap-4" :style="'transform: translateY(' + (scrollY * 0.03) + 'px)'">
+                    <div class="p-6 border border-zinc-800 rounded-2xl bg-zinc-950 shadow-xl">
+                        <div class="text-3xl font-bold text-white mb-1">0.1s</div>
+                        <div class="text-xs text-zinc-600 uppercase font-bold tracking-widest">Latency</div>
+                    </div>
+                    <div class="p-6 border border-zinc-800 rounded-2xl bg-zinc-950 shadow-xl" :style="'transform: translateY(' + (scrollY * -0.02) + 'px)'">
+                        <div class="text-3xl font-bold text-white mb-1">100%</div>
+                        <div class="text-xs text-zinc-600 uppercase font-bold tracking-widest">Privacy</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="max-w-4xl mx-auto px-8 py-32 text-center relative">
+            <h2 class="text-4xl font-bold text-white mb-6" :style="'transform: scale(' + (1 + scrollY * 0.0001) + ')'">Evolving Neural Intelligence.</h2>
+            <p class="text-zinc-400 text-lg mb-12">Every scan helps AI Sentinel Pro get smarter. Start securing your vectors today.</p>
+            <button @click="navigate('dashboard')" class="bg-white hover:bg-zinc-200 text-black px-10 py-4 rounded-xl font-bold transition shadow-lg">Launch Forensic Analyst</button>
+        </section>
+    </main>
+</template>
+
+<!-- 2. SCANNER DASHBOARD (App) -->
+<template x-if="page === 'dashboard'">
+    <main class="max-w-4xl mx-auto px-8 py-16 fade-in">
+        <div class="flex justify-between items-center mb-16">
+            <div>
+                <h2 class="text-4xl font-bold tracking-tight text-white">Forensic Diagnostics</h2>
+                <p class="text-zinc-500 mt-2">Input target URL vector for multi-tier cognitive analysis.</p>
+            </div>
+            <button @click="navigate('landing')" class="text-zinc-600 hover:text-white transition text-sm">← Exit Engine</button>
+        </div>
+
+        <!-- Input Area -->
+        <div class="flex gap-3 p-3 bg-zinc-900/80 zinc-border border rounded-2xl shadow-2xl mb-12">
+            <input type="text" x-model="url" @keyup.enter="analyze()" placeholder="https://suspicious-vector.com/login" class="bg-transparent flex-1 px-5 py-3 outline-none text-blue-400 text-lg mono">
+            <button @click="analyze()" class="bg-white text-black px-10 py-3 rounded-xl font-bold hover:bg-zinc-200 transition">
+                <span x-show="!loading">Analyze</span>
+                <span x-show="loading" class="flex items-center gap-2">
+                        <svg class="animate-spin h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        Scanning
+                    </span>
+            </button>
+        </div>
+
+        <!-- Results Section Remains Clean and Static for Professional Use -->
+        <template x-if="result">
+            <div class="space-y-8 fade-in">
+                <!-- Threat Score -->
+                <div class="p-10 border rounded-3xl bg-zinc-900/60 text-center" :class="result.risk > 70 ? 'border-red-900' : (result.risk > 30 ? 'border-yellow-900' : 'border-zinc-800')">
+                    <span class="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-4 block">Risk Assessment Index</span>
+                    <h3 class="text-8xl font-black" :class="result.risk > 50 ? 'text-red-500' : 'text-green-500'" x-text="result.risk + '%'"></h3>
+                    <p class="text-xl font-bold mt-4 uppercase tracking-widest" :class="result.risk > 50 ? 'text-red-400' : 'text-green-400'" x-text="result.risk > 70 ? 'DANGEROUS TRAP' : (result.risk > 30 ? 'CAUTION ADVISED' : 'THIS SITE IS SAFE')"></p>
+
+                    <div class="w-full h-3 bg-zinc-800 rounded-full mt-10 overflow-hidden border border-zinc-700/30">
+                        <div class="h-full bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-1000" :style="'width: ' + result.risk + '%'"></div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-8 zinc-border border rounded-2xl bg-zinc-900/30">
+                        <h4 class="text-zinc-500 text-xs font-bold uppercase mb-6 tracking-widest">Inference Markers</h4>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex justify-between items-center">
+                                <span class="text-zinc-400">Credential Capture Box</span>
+                                <span x-text="result.evidence.has_password ? '🚨 Found' : '✓ Secure'" :class="result.evidence.has_password ? 'text-red-400 font-bold' : 'text-zinc-500'"></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-zinc-400">Structural DNA Anomaly</span>
+                                <span x-text="result.evidence.brand_spoofing ? '🚨 Found' : '✓ Secure'" :class="result.evidence.brand_spoofing ? 'text-red-400 font-bold' : 'text-zinc-500'"></span>
+                            </div>
+                            <div class="flex justify-between items-center text-zinc-500">
+                                <span>Infra Risk Score:</span>
+                                <span class="text-white mono" x-text="result.infra + '%'"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 zinc-border border rounded-2xl bg-zinc-900/30 flex flex-col justify-center">
+                        <h4 class="text-zinc-500 text-xs font-bold uppercase mb-4 tracking-widest">Analyst Verdict</h4>
+                        <p class="text-zinc-400 text-sm leading-relaxed" x-text="result.risk > 50 ? 'Inference engine has identified high-confidence malicious markers. Advise immediate termination.' : 'No significant structural or behavioral anomalies detected.'"></p>
+                    </div>
+                </div>
+
+                <!-- Feedback Loop -->
+                <div class="pt-8 border-t border-zinc-800 flex flex-col items-center gap-6">
+                    <p class="text-zinc-500 text-sm text-center italic">Correction required? Adjust Neural Weights:</p>
+                    <div class="flex gap-4">
+                        <button @click="feedback(0)" class="px-8 py-3 border border-zinc-800 rounded-xl hover:bg-zinc-900 transition font-bold text-sm">Verify Safe</button>
+                        <button @click="feedback(1)" class="px-8 py-3 border border-red-900 text-red-400 rounded-xl hover:bg-red-900/10 transition font-bold text-sm">Flag Threat</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </main>
+</template>
+
+<!-- Footer -->
+<footer class="max-w-6xl mx-auto px-8 py-16 border-t border-zinc-800 mt-24 text-zinc-500 text-sm text-center">
+    <p>© 2024 AI Sentinel Pro. Advanced Cognitive Cyber-Defense Engine.</p>
+</footer>
+
+</body>
+</html>

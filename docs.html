@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation | AI Sentinel Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #09090b; color: #fafafa; }
+        .zinc-border { border-color: #27272a; }
+        .prose h2 { color: #ffffff; font-weight: 700; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose p { color: #a1a1aa; line-height: 1.7; margin-bottom: 1.25rem; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; color: #a1a1aa; margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.5rem; }
+        .prose code { font-family: 'JetBrains Mono', monospace; background-color: #18181b; padding: 0.2rem 0.4rem; border-radius: 4px; color: #3b82f6; }
+    </style>
+</head>
+<body class="selection:bg-blue-500/30">
+    <nav class="border-b zinc-border px-8 py-4 flex justify-between items-center bg-zinc-950/50 backdrop-blur sticky top-0 z-50">
+        <a href="/" class="flex items-center gap-2">
+            <span class="text-xl font-bold tracking-tighter">🛡️ AI SENTINEL PRO</span>
+        </a>
+        <div class="text-sm font-medium text-zinc-400">
+            System Documentation v6.5
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-8 py-16">
+        <header class="mb-12 border-b zinc-border pb-8">
+            <h1 class="text-5xl font-extrabold tracking-tight text-white mb-4">Technical Documentation</h1>
+            <p class="text-xl text-zinc-400">Understanding the architecture and operational protocols of the AI Sentinel Pro detection engine.</p>
+        </header>
+
+        <section class="prose">
+            <h2>1. System Overview</h2>
+            <p>
+                AI Sentinel Pro is an enterprise-grade cybersecurity solution designed to mitigate the risks of phishing and credential harvesting.
+                By utilizing a <strong>Hybrid Intelligence Architecture</strong>, the system bridges the gap between traditional heuristic detection and modern deep-learning paradigms.
+            </p>
+
+            <h2>2. Detection Methodology</h2>
+            <p>Our analysis engine operates across three distinct computational tiers:</p>
+            <ul>
+                <li><strong>Structural DNA Sequencing:</strong> Analyzes URL character distributions and entropy using DistilBERT Transformers to identify semantic brand impersonation.</li>
+                <li><strong>Infrastructure Audit:</strong> Evaluates domain authority, registrar reputation, and WHOIS lifecycle data to determine the volatility of the host infrastructure.</li>
+                <li><strong>Behavioral Sandbox:</strong> Executes a real-time headless browser session to detect dynamic anomalies, such as hidden login forms and external data exfiltration endpoints.</li>
+            </ul>
+
+            <h2>3. Score Interpretation</h2>
+            <p>The system generates a <code>Threat Index Score</code> ranging from 0 to 100:</p>
+            <ul>
+                <li><code>0% - 30%</code>: <strong>Low Risk.</strong> The vector aligns with verified legitimate architectural patterns.</li>
+                <li><code>31% - 70%</code>: <strong>Elevated Risk.</strong> Suspicious behavioral markers detected. Manual verification recommended.</li>
+                <li><code>71% - 100%</code>: <strong>Critical Risk.</strong> High-confidence malicious intent identified. Automated remediation suggested.</li>
+            </ul>
+
+            <h2>4. API Integration</h2>
+            <p>
+                Developers can interface with the Sentinel engine via the <code>/analyze</code> endpoint.
+                The endpoint accepts a JSON payload containing a <code>url</code> string and returns a comprehensive forensic report including behavioral evidence and infrastructure risk.
+            </p>
+
+            <h2>5. Neural Feedback Loop</h2>
+            <p>
+                To maintain the precision of the model, AI Sentinel Pro implements a <strong>Human-in-the-loop</strong> feedback system.
+                Verified safe or malicious vectors can be submitted to the <code>/feedback</code> endpoint, which updates the local threat intelligence repository for the next retraining cycle.
+            </p>
+        </section>
+
+        <footer class="mt-24 pt-8 border-t zinc-border text-center text-zinc-600 text-sm">
+            © 2024 AI Sentinel Pro Intelligence Group.
+        </footer>
+    </main>
+</body>
+</html>
