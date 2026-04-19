@@ -1,9 +1,6 @@
 {
     "name": "AI-Sentinel Pro Engine",
     "image": "mcr.microsoft.com/devcontainers/python:3.11",
-    "features": {
-        "ghcr.io/devcontainers/features/node-js:1": {}
-    },
     "customizations": {
         "vscode": {
             "extensions": [
