@@ -1,3 +1,13 @@
+---
+title: AI Sentinel Pro
+emoji: 🛡️
+colorFrom: blue
+colorTo: zinc
+sdk: docker
+pinned: false
+app_port: 7860
+---
+
 # 🛡️ Sentinel Forensic: High-Efficiency Phishing Analyst
 
 Sentinel Forensic is a professional-grade security tool that detects phishing URLs using a **Rule-Based Heuristic Engine**. By focusing on forensic evidence rather than black-box AI, it provides transparent, explainable, and lightning-fast threat assessments.
