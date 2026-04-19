@@ -24,18 +24,6 @@ MODELS = {}
 
 @app.on_event("startup")
 def load_models():
-    # 1. Ensure Data Directory and Basic Sets exist
-    if not os.path.exists('data/phishing_dataset.csv') or not os.path.exists('data/whitelist.txt'):
-        print("📊 Data files missing. Rebuilding from official sources...")
-        from src.build_dataset import build_training_dataset, build_app_whitelist
-        build_training_dataset()
-        build_app_whitelist()
-
-    # 2. Ensure AI Assets are localized
-    from src.ai_model import download_ai_assets
-    download_ai_assets()
-
-    # 2. Load Local RandomForest Expert Logic
     rf_path = 'models/phishing_model.pkl'
     if os.path.exists(rf_path):
         MODELS['rf'] = joblib.load(rf_path)
@@ -133,6 +121,4 @@ async def log_feedback(req: FeedbackRequest):
     return {"status": res}
 
 if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 7860))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

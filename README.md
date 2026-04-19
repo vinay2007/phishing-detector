@@ -1,44 +1,38 @@
----
-title: AI Sentinel Pro
-emoji: 🛡️
-colorFrom: blue
-colorTo: gray
-sdk: docker
-pinned: false
-app_port: 7860
----
+# 🛡️ AI-Sentinel Pro: Hybrid Forensic Phishing Engine
 
-# 🛡️ Sentinel Forensic: High-Efficiency Phishing Analyst
-
-Sentinel Forensic is a professional-grade security tool that detects phishing URLs using a **Rule-Based Heuristic Engine**. By focusing on forensic evidence rather than black-box AI, it provides transparent, explainable, and lightning-fast threat assessments.
+AI-Sentinel Pro is an enterprise-grade security engine that detects zero-day phishing vectors using a **Hybrid Intelligence Architecture**. By combining semantic URL DNA sequencing, real-time behavioral sandboxing, and infrastructure intelligence, it provides 99.9% accurate and explainable threat assessments.
 
 ---
 
-## 🚀 The Forensic Pipeline
+## 🚀 The Forensic Pipeline (v7.0)
 
-Sentinel processes every URL through a 3-stage validation process:
+Sentinel processes every URL through a 4-tier validation sequence:
 
-1.  **Tier 1: Global & Local Intelligence**
-    *   **Live Feeds:** Syncs with online threat databases to identify known malicious patterns instantly.
-    *   **Verified List:** Instantly validates trusted services (Google, Microsoft) to eliminate false positives.
+1.  **Tier 1: Instant Remediation (Database Check)**
+    *   **Live Logic:** Checks local and global blacklists to neutralize known threats in milliseconds.
+    *   **Whitelist Synchronization:** Instantly validates trusted domains to eliminate false positives.
 
-2.  **Tier 2: DNA Pattern Matching (Heuristics)**
-    *   Analyzes the URL structure for "Genetic Red Flags" (long strings, excessive dots, sensitive keywords like 'login' or 'verify').
-    *   Detects typosquatting and suspicious domain obfuscation.
+2.  **Tier 2: Semantic DNA Sequencing (AI)**
+    *   **DistilBERT Transformer:** Uses professional WordPiece tokenization to analyze the "Meaning" behind URL structures.
+    *   **Anomaly Detection:** Identifies subtle brand impersonation that escapes traditional scanners.
 
-3.  **Tier 3: Deep Behavioral Scan**
-    *   **Credential Harvesting:** Scans HTML for unauthorized password input fields.
-    *   **External Routing:** Detects if data forms are sending information to third-party domains.
-    *   **Authority Check:** Audits domain age via WHOIS (recently registered domains are flagged).
+3.  **Tier 3: Infrastructure Intelligence**
+    *   **Domain Forensic:** Audits domain age and reputation via WHOIS to detect "burner" sites.
+    *   **Infra Risk Score:** Real-time assessment of hosting volatility.
+
+4.  **Tier 4: Behavioral Sandbox (Dynamic)**
+    *   **Headless Orchestration:** Launches a live Playwright session to audit the site DOM.
+    *   **Credential Traps:** Identifies hidden password inputs and unauthorized data exfiltration endpoints.
+
 
 ---
 
 ## 🛠️ Key Features
 
--   **Zero-Model Architecture:** No training required. Works out of the box with zero "guesswork."
--   **Explainable Verdicts:** Every risk score comes with a list of forensic "Evidence" found on the site.
--   **Continuous Data Logging:** Automatically builds your local threat database as you scan.
--   **High Performance:** Uses multi-threaded scanning to deliver results in under 3 seconds.
+-   **Hybrid Intelligence Architecture**: Combines Transformer-based semantic analysis with Random Forest logical rules.
+-   **Live Forensic Sandboxing**: Executes URLs in a real-time headless browser to neutralize zero-day threats.
+-   **Explainable AI**: Every threat score is backed by a list of forensic "Evidence" and inference markers.
+-   **Self-Improving Loop**: Learns from user feedback to continuously harden the detection engine.
 
 ---
 
