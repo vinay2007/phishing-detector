@@ -24,7 +24,14 @@ MODELS = {}
 
 @app.on_event("startup")
 def load_models():
-    # 1. Ensure AI Assets are localized (Downloads if missing)
+    # 1. Ensure Data Directory and Basic Sets exist
+    if not os.path.exists('data/phishing_dataset.csv') or not os.path.exists('data/whitelist.txt'):
+        print("📊 Data files missing. Rebuilding from official sources...")
+        from src.build_dataset import build_training_dataset, build_app_whitelist
+        build_training_dataset()
+        build_app_whitelist()
+
+    # 2. Ensure AI Assets are localized
     from src.ai_model import download_ai_assets
     download_ai_assets()
 
