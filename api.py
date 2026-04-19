@@ -24,6 +24,11 @@ MODELS = {}
 
 @app.on_event("startup")
 def load_models():
+    # 1. Ensure AI Assets are localized (Downloads if missing)
+    from src.ai_model import download_ai_assets
+    download_ai_assets()
+
+    # 2. Load Local RandomForest Expert Logic
     rf_path = 'models/phishing_model.pkl'
     if os.path.exists(rf_path):
         MODELS['rf'] = joblib.load(rf_path)
